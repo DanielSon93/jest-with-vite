@@ -1,5 +1,6 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import "./App.css";
+import axios from "axios";
 
 function App() {
   const [email, setEmail] = useState<string>("");
@@ -14,6 +15,10 @@ function App() {
       return;
     }
   };
+
+  useEffect(() => {
+    axios.get("/data/data.json").then((res) => console.log(res));
+  }, []);
 
   return (
     <>
