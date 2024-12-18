@@ -1,24 +1,20 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent } from "react";
 import "./App.css";
-import axios from "axios";
+import useLogin from "./hooks/useLogin";
 
 function App() {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [loginError, setLoginError] = useState<boolean>(false);
+  const { values, error, handleChange, validate } = useLogin({
+    email: "",
+    password: "",
+  });
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      setLoginError(true);
+    if (!validate()) {
       return;
     }
   };
-
-  useEffect(() => {
-    axios.get("/data/data.json").then((res) => console.log(res));
-  }, []);
 
   return (
     <>
@@ -26,7 +22,7 @@ function App() {
         <h1>HEADER</h1>
       </header>
 
-      {loginError && <p id="errorMessage">ERROR</p>}
+      {error && <p id="errorMessage">ERROR</p>}
 
       <main>
         <form onSubmit={onSubmit}>
@@ -34,16 +30,18 @@ function App() {
             <h2>email</h2>
             <input
               type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              value={values.email}
+              onChange={handleChange}
             />
           </div>
           <div>
             <h2>password</h2>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={values.password}
+              onChange={handleChange}
             />
           </div>
           <button id="submitButton" type="submit">
